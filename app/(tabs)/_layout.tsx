@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: "transparent",
     borderTopWidth: 0,
-    paddingTop: 12,
+    paddingTop: screenWidth > 600 ? 21 : 14,
     width: 340,
     marginLeft: (screenWidth - 340) / 2,
   },
