@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
+  Animated,
   Image,
   StyleSheet,
   Text,
@@ -14,6 +15,140 @@ import earthImage from "@/assets/ui/earth.png";
 import treeImage from "@/assets/ui/tree.png";
 //@ts-ignore
 import whaleImage from "@/assets/ui/whale.png";
+
+// Sparkle component
+const Sparkle = ({ style, delay = 0, duration = 2000 }: any) => {
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const rotateAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const animate = () => {
+      Animated.parallel([
+        Animated.sequence([
+          Animated.delay(delay),
+          Animated.parallel([
+            Animated.timing(scaleAnim, {
+              toValue: 1,
+              duration: duration / 2,
+              useNativeDriver: true,
+            }),
+            Animated.timing(opacityAnim, {
+              toValue: 1,
+              duration: duration / 3,
+              useNativeDriver: true,
+            }),
+          ]),
+          Animated.parallel([
+            Animated.timing(scaleAnim, {
+              toValue: 0,
+              duration: duration / 2,
+              useNativeDriver: true,
+            }),
+            Animated.timing(opacityAnim, {
+              toValue: 0,
+              duration: duration / 3,
+              useNativeDriver: true,
+            }),
+          ]),
+        ]),
+        Animated.loop(
+          Animated.timing(rotateAnim, {
+            toValue: 1,
+            duration: duration,
+            useNativeDriver: true,
+          })
+        ),
+      ]).start(() => {
+        scaleAnim.setValue(0);
+        opacityAnim.setValue(0);
+        rotateAnim.setValue(0);
+        animate();
+      });
+    };
+
+    animate();
+  }, [delay, duration]);
+
+  const spin = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
+
+  return (
+    <Animated.View
+      style={[
+        styles.sparkle,
+        style,
+        {
+          transform: [{ scale: scaleAnim }, { rotate: spin }],
+          opacity: opacityAnim,
+        },
+      ]}
+    >
+      <Text style={styles.sparkleText}>✦</Text>
+    </Animated.View>
+  );
+};
+
+// Star component
+const Star = ({ style, delay = 0, duration = 3000 }: any) => {
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const animate = () => {
+      Animated.sequence([
+        Animated.delay(delay),
+        Animated.parallel([
+          Animated.timing(scaleAnim, {
+            toValue: 1,
+            duration: duration / 2,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacityAnim, {
+            toValue: 0.9,
+            duration: duration / 3,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.parallel([
+          Animated.timing(scaleAnim, {
+            toValue: 0,
+            duration: duration / 2,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacityAnim, {
+            toValue: 0,
+            duration: duration / 3,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]).start(() => {
+        scaleAnim.setValue(0);
+        opacityAnim.setValue(0);
+        animate();
+      });
+    };
+
+    animate();
+  }, [delay, duration]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.star,
+        style,
+        {
+          transform: [{ scale: scaleAnim }],
+          opacity: opacityAnim,
+        },
+      ]}
+    >
+      <Text style={styles.starText}>★</Text>
+    </Animated.View>
+  );
+};
 
 const Dashboard = () => {
   const { width } = useWindowDimensions();
@@ -54,6 +189,8 @@ const Dashboard = () => {
               That's like planting 11 trees
             </Text>
           </View>
+
+          {/* Earth image */}
           <Image
             source={earthImage}
             style={[
@@ -61,6 +198,57 @@ const Dashboard = () => {
               isTablet ? styles.earthIconTablet : styles.earthIconPhone,
             ]}
             resizeMode="contain"
+          />
+
+          {/* Sparkles and stars around earth */}
+          <Sparkle
+            style={[
+              styles.sparklePosition,
+              isTablet ? styles.sparkle1Tablet : styles.sparkle1Phone,
+            ]}
+            delay={0}
+            duration={2500}
+          />
+          <Sparkle
+            style={[
+              styles.sparklePosition,
+              isTablet ? styles.sparkle2Tablet : styles.sparkle2Phone,
+            ]}
+            delay={800}
+            duration={2000}
+          />
+          <Sparkle
+            style={[
+              styles.sparklePosition,
+              isTablet ? styles.sparkle3Tablet : styles.sparkle3Phone,
+            ]}
+            delay={1600}
+            duration={3000}
+          />
+
+          <Star
+            style={[
+              styles.starPosition,
+              isTablet ? styles.star1Tablet : styles.star1Phone,
+            ]}
+            delay={400}
+            duration={3500}
+          />
+          <Star
+            style={[
+              styles.starPosition,
+              isTablet ? styles.star2Tablet : styles.star2Phone,
+            ]}
+            delay={1200}
+            duration={2800}
+          />
+          <Star
+            style={[
+              styles.starPosition,
+              isTablet ? styles.star3Tablet : styles.star3Phone,
+            ]}
+            delay={2000}
+            duration={3200}
           />
         </View>
       </LinearGradient>
@@ -186,6 +374,91 @@ const styles = StyleSheet.create({
     height: 480,
     right: "-45%",
     top: "-3%",
+  },
+
+  // Sparkle and star styles
+  sparkle: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sparkleText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  sparklePosition: {
+    zIndex: 15,
+  },
+
+  star: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  starText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  starPosition: {
+    zIndex: 15,
+  },
+
+  // Phone sparkle positions
+  sparkle1Phone: {
+    top: "10%",
+    right: "5%",
+  },
+  sparkle2Phone: {
+    top: "40%",
+    right: "15%",
+  },
+  sparkle3Phone: {
+    top: "70%",
+    right: "8%",
+  },
+
+  // Tablet sparkle positions
+  sparkle1Tablet: {
+    top: "15%",
+    right: "8%",
+  },
+  sparkle2Tablet: {
+    top: "45%",
+    right: "18%",
+  },
+  sparkle3Tablet: {
+    top: "75%",
+    right: "12%",
+  },
+
+  // Phone star positions
+  star1Phone: {
+    top: "25%",
+    right: "2%",
+  },
+  star2Phone: {
+    top: "55%",
+    right: "25%",
+  },
+  star3Phone: {
+    top: "15%",
+    right: "20%",
+  },
+
+  // Tablet star positions
+  star1Tablet: {
+    top: "30%",
+    right: "5%",
+  },
+  star2Tablet: {
+    top: "60%",
+    right: "28%",
+  },
+  star3Tablet: {
+    top: "20%",
+    right: "25%",
   },
 
   // Main card text styles
