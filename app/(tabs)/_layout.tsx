@@ -53,7 +53,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="camera"
+        name="post"
         options={{
           title: "Camera",
           tabBarIcon: () => <CameraTabIcon />,
