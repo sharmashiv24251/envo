@@ -1,4 +1,5 @@
 import Dashboard from "@/components/dashboard/";
+import FeedPreview from "@/components/feed-preview";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,6 +12,7 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Dashboard />
+        <FeedPreview />
       </ScrollView>
     </SafeAreaView>
   );

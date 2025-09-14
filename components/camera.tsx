@@ -16,7 +16,7 @@ import {
 // Constants
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const CAMERA_WIDTH = Math.min(screenWidth * 0.85, 500);
-const CAMERA_HEIGHT = (CAMERA_WIDTH * 3) / 4;
+const CAMERA_HEIGHT = (CAMERA_WIDTH * 4) / 3;
 const BORDER_RADIUS = 18;
 const DOUBLE_TAP_DELAY = 300;
 const PRIMARY_COLOR = "#22c55e";
