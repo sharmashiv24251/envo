@@ -173,8 +173,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    fontSize: 22,
-    fontWeight: "800",
+    fontSize: 19,
+    fontWeight: "600",
     color: "#1f2937",
     letterSpacing: -0.5,
     marginBottom: 12,
