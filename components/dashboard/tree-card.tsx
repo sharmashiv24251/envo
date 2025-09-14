@@ -8,11 +8,17 @@ const AnimatedCounter = ({
   suffix = "",
   duration = 1000,
   style,
+  isLoading = false,
 }: any) => {
   const [displayValue, setDisplayValue] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    if (isLoading) {
+      setDisplayValue(0);
+      return;
+    }
+
     Animated.timing(animatedValue, {
       toValue: value,
       duration,
@@ -25,17 +31,25 @@ const AnimatedCounter = ({
     });
 
     return () => animatedValue.removeListener(listener);
-  }, [value, duration]);
+  }, [value, duration, isLoading]);
 
   return (
     <Text style={style}>
-      {displayValue}
+      {isLoading ? "00" : displayValue}
       {suffix}
     </Text>
   );
 };
 
-const TreeCard = ({ isTablet }: { isTablet: boolean }) => {
+const TreeCard = ({
+  isTablet,
+  treesValue,
+  isLoading,
+}: {
+  isTablet: boolean;
+  treesValue: number;
+  isLoading: boolean;
+}) => {
   const translateYAnim = useRef(new Animated.Value(50)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
@@ -81,13 +95,14 @@ const TreeCard = ({ isTablet }: { isTablet: boolean }) => {
       />
       <View style={styles.treeCard__textContainer}>
         <AnimatedCounter
-          value={27}
+          value={treesValue}
           suffix=" trees planted"
           style={[
             styles.treeCard__title,
             isTablet && styles.treeCard__title_tablet,
           ]}
           duration={1100}
+          isLoading={isLoading}
         />
         <Text
           style={[

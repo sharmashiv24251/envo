@@ -1,3 +1,4 @@
+import { useDashboard } from "@/hooks/api";
 import React from "react";
 import { StyleSheet, useWindowDimensions, View } from "react-native";
 import EarthCard from "./earth-card";
@@ -8,9 +9,19 @@ const Dashboard = () => {
   const { width } = useWindowDimensions();
   const isTablet = width >= 600;
 
+  const {
+    data: dashboardData,
+    isLoading: loadingDashboard,
+    refetch: refetchDashboard,
+  } = useDashboard();
+
   return (
     <View style={[styles.dashboard, isTablet && styles.dashboard_tablet]}>
-      <EarthCard isTablet={isTablet} />
+      <EarthCard
+        isTablet={isTablet}
+        co2Value={dashboardData?.co2 || 0}
+        isLoading={loadingDashboard}
+      />
 
       <View
         style={[
@@ -18,8 +29,16 @@ const Dashboard = () => {
           isTablet && styles.dashboard__statsGrid_tablet,
         ]}
       >
-        <WhaleCard isTablet={isTablet} />
-        <TreeCard isTablet={isTablet} />
+        <WhaleCard
+          isTablet={isTablet}
+          plasticValue={dashboardData?.plastic || 0}
+          isLoading={loadingDashboard}
+        />
+        <TreeCard
+          isTablet={isTablet}
+          treesValue={dashboardData?.trees || 0}
+          isLoading={loadingDashboard}
+        />
       </View>
     </View>
   );

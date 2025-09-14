@@ -8,11 +8,17 @@ const AnimatedCounter = ({
   suffix = "",
   duration = 1000,
   style,
+  isLoading = false,
 }: any) => {
   const [displayValue, setDisplayValue] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    if (isLoading) {
+      setDisplayValue(0);
+      return;
+    }
+
     Animated.timing(animatedValue, {
       toValue: value,
       duration,
@@ -25,17 +31,25 @@ const AnimatedCounter = ({
     });
 
     return () => animatedValue.removeListener(listener);
-  }, [value, duration]);
+  }, [value, duration, isLoading]);
 
   return (
     <Text style={style} numberOfLines={1} ellipsizeMode="tail">
-      {String(displayValue).padStart(2, "0")}
+      {isLoading ? "00" : String(displayValue).padStart(2, "0")}
       {suffix}
     </Text>
   );
 };
 
-const WhaleCard = ({ isTablet }: { isTablet: boolean }) => {
+const WhaleCard = ({
+  isTablet,
+  plasticValue,
+  isLoading,
+}: {
+  isTablet: boolean;
+  plasticValue: number;
+  isLoading: boolean;
+}) => {
   const translateYAnim = useRef(new Animated.Value(50)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
@@ -63,6 +77,8 @@ const WhaleCard = ({ isTablet }: { isTablet: boolean }) => {
     ]).start();
   }, []);
 
+  const bottlesSaved = Math.floor(plasticValue * 80); // Approximate calculation
+
   return (
     <Animated.View
       style={[
@@ -82,7 +98,7 @@ const WhaleCard = ({ isTablet }: { isTablet: boolean }) => {
       />
       <View style={styles.whaleCard__textContainer}>
         <AnimatedCounter
-          value={12}
+          value={plasticValue}
           suffix=" kg plastic saved"
           style={[
             styles.whaleCard__title,
@@ -90,6 +106,7 @@ const WhaleCard = ({ isTablet }: { isTablet: boolean }) => {
             !isTablet && styles.whaleCard__title_small,
           ]}
           duration={1000}
+          isLoading={isLoading}
         />
         <Text
           style={[
@@ -98,7 +115,7 @@ const WhaleCard = ({ isTablet }: { isTablet: boolean }) => {
           ]}
           numberOfLines={2}
         >
-          That's 960 bottles kept out of oceans!
+          That's {isLoading ? "000" : bottlesSaved} bottles kept out of oceans!
         </Text>
       </View>
     </Animated.View>

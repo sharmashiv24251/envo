@@ -9,11 +9,17 @@ const AnimatedCounter = ({
   suffix = "",
   duration = 1000,
   style,
+  isLoading = false,
 }: any) => {
   const [displayValue, setDisplayValue] = useState(0);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    if (isLoading) {
+      setDisplayValue(0);
+      return;
+    }
+
     Animated.timing(animatedValue, {
       toValue: value,
       duration,
@@ -26,11 +32,11 @@ const AnimatedCounter = ({
     });
 
     return () => animatedValue.removeListener(listener);
-  }, [value, duration]);
+  }, [value, duration, isLoading]);
 
   return (
     <Text style={style}>
-      {displayValue}
+      {isLoading ? "000" : displayValue}
       {suffix}
     </Text>
   );
@@ -117,7 +123,15 @@ const Decorations = ({ isTablet }: { isTablet: boolean }) => {
   );
 };
 
-const EarthCard = ({ isTablet }: { isTablet: boolean }) => {
+const EarthCard = ({
+  isTablet,
+  co2Value,
+  isLoading,
+}: {
+  isTablet: boolean;
+  co2Value: number;
+  isLoading: boolean;
+}) => {
   const cardScale = useRef(new Animated.Value(0.9)).current;
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const earthPulse = useRef(new Animated.Value(1)).current;
@@ -152,6 +166,8 @@ const EarthCard = ({ isTablet }: { isTablet: boolean }) => {
     ).start();
   }, []);
 
+  const treesPlanted = Math.floor(co2Value / 22.5); // Approximate calculation
+
   return (
     <Animated.View
       style={[
@@ -171,13 +187,14 @@ const EarthCard = ({ isTablet }: { isTablet: boolean }) => {
         <View style={styles.earthCard__content}>
           <View style={styles.earthCard__textSection}>
             <AnimatedCounter
-              value={248}
+              value={co2Value}
               suffix=" kg"
               style={[
                 styles.earthCard__value,
                 isTablet && styles.earthCard__value_tablet,
               ]}
               duration={1250}
+              isLoading={isLoading}
             />
             <Text
               style={[
@@ -193,7 +210,8 @@ const EarthCard = ({ isTablet }: { isTablet: boolean }) => {
                 isTablet && styles.earthCard__description_tablet,
               ]}
             >
-              That's like planting {"\n"}11 trees
+              That's like planting {"\n"}
+              {isLoading ? "00" : treesPlanted} trees
             </Text>
           </View>
 
