@@ -11,20 +11,36 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sharmashiv24251.myapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.sharmashiv24251.myapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-router"],
-    "scheme": "myapp"
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "myapp",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7aec396d-3725-4e38-a3b3-40046d0006fe"
+      }
+    },
+    "owner": "sharmashiv24251"
   }
 }
