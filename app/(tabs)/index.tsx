@@ -1,5 +1,6 @@
 import Dashboard from "@/components/dashboard/";
 import FeedPreview from "@/components/feed-preview";
+import Nav from "@/components/nav";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,6 +12,7 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        <Nav />
         <Dashboard />
         <FeedPreview />
       </ScrollView>
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingTop: 20,
+    paddingTop: 10,
     paddingBottom: 100,
   },
 });

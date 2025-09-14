@@ -1,9 +1,8 @@
-import Button from "@/components/button";
 import Dashboard from "@/components/dashboard";
 import Post from "@/components/post";
 import { useProfile } from "@/hooks/api";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useCallback } from "react";
 import {
   ActivityIndicator,
@@ -71,10 +70,16 @@ export default function ProfileScreen() {
         </View>
 
         {/* Action Button */}
-        <Button
+        {/* <Button
           title="Settings"
           onPress={() => router.push("/profile/settings")}
-        />
+          style={{ marginHorizontal: 20 }}
+        /> */}
+
+        <Dashboard />
+        <Text style={styles.aiNote}>
+          *This will be shown only one other users profile
+        </Text>
       </View>
     );
   }, [profile]);
@@ -218,7 +223,6 @@ const styles = StyleSheet.create({
 
   // Profile Header Styles
   profileHeader: {
-    padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#f1f5f9",
     backgroundColor: "#ffffff",
@@ -378,5 +382,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     letterSpacing: 0.2,
+  },
+  aiNote: {
+    fontSize: 12,
+    color: "#64748b",
+    marginTop: 8,
+    fontWeight: "500",
+    marginHorizontal: 20,
   },
 });

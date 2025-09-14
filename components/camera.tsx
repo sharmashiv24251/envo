@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     justifyContent: "flex-start",
-    paddingTop: screenHeight * 0.08,
+    paddingTop: screenHeight * 0.05,
     alignItems: "center",
   },
   cameraInterface: {
